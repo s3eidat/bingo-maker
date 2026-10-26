@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' data: blob:; connect-src 'self' data: blob:; worker-src 'self' blob:; manifest-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Bingo Maker — Free Printable Bingo Cards &amp; Bingo Caller | S3eidat Tools</title>
+<meta name="description" content="Make unique printable bingo cards: 75-ball (with free space), 90-ball tickets or word bingo from your own list. 1, 2 or 4 per page, reproducible with a seed, plus a bingo caller with a big display, history board and undo. Free and private.">
+<meta property="og:title" content="Bingo Maker — printable cards and a caller">
+<meta property="og:description" content="Unique 75-ball, 90-ball and word bingo cards plus a caller. Runs 100% in your browser.">
+<link rel="icon" href="kit/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="app.css">
+<script src="kit/kit.js"></script>
+<!--s3:seo-->
+<link rel="canonical" href="https://s3eidat.github.io/bingo-maker/">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0f12">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="S3eidat Tools">
+<meta property="og:url" content="https://s3eidat.github.io/bingo-maker/">
+<meta property="og:image" content="https://s3eidat.github.io/bingo-maker/screenshot.png">
+<meta property="og:image:width" content="1280"><meta property="og:image:height" content="800">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bingo Maker — Printable bingo cards and a caller">
+<meta name="twitter:description" content="Printable bingo cards and a caller. Free, private and runs 100% in your browser: no sign-up, no uploads.">
+<meta name="twitter:image" content="https://s3eidat.github.io/bingo-maker/screenshot.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Bingo Maker", "url": "https://s3eidat.github.io/bingo-maker/", "description": "Printable bingo cards and a caller. Free, private and runs 100% in your browser: no sign-up, no uploads.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "image": "https://s3eidat.github.io/bingo-maker/screenshot.png", "author": {"@type": "Person", "name": "s3eidat", "url": "https://github.com/s3eidat"}}</script>
+<!--/s3:seo-->
+</head>
+<body data-tool="bingo-maker">
+<main class="s3-main bm-main">
+  <section class="s3-hero no-print">
+    <h1>Bingo Maker</h1>
+    <p>Print unique bingo cards for 75-ball, 90-ball or word bingo from your own list, then run the game with the built-in caller.</p>
+  </section>
+
+  <div class="row between no-print">
+    <div class="seg" id="tab" role="group" aria-label="Mode">
+      <button aria-pressed="true" data-v="cards">Make cards</button>
+      <button aria-pressed="false" data-v="caller">Caller</button>
+    </div>
+    <div class="seg" id="kind" role="group" aria-label="Bingo type">
+      <button aria-pressed="true" data-v="75">75-ball</button>
+      <button aria-pressed="false" data-v="90">90-ball</button>
+      <button aria-pressed="false" data-v="words">Words</button>
+    </div>
+  </div>
+
+  <div class="bm-layout mt" id="cardsTab">
+    <aside class="card stack no-print">
+      <label class="field">Title on the cards
+        <input class="input" id="title" maxlength="40" dir="auto" value="BINGO">
+      </label>
+      <div class="field" id="wordsWrap" hidden>
+        <label for="words">Your words, one per line <span class="faint" id="wordCount"></span></label>
+        <textarea class="textarea prose bm-words" id="words" dir="auto" spellcheck="false"></textarea>
+      </div>
+      <label class="check" id="freeWrap"><input type="checkbox" id="free" checked> Free space in the middle</label>
+      <div class="grid-2 bm-tight">
+        <label class="field">How many cards
+          <input class="input" id="count" type="number" min="1" max="300" value="8" inputmode="numeric">
+        </label>
+        <div class="field">Per page
+          <div class="seg" id="per" role="group" aria-label="Cards per page">
+            <button aria-pressed="false" data-v="1">1</button>
+            <button aria-pressed="false" data-v="2">2</button>
+            <button aria-pressed="true" data-v="4">4</button>
+          </div>
+        </div>
+      </div>
+      <label class="field">Seed <span class="faint">(same seed + settings = the same cards)</span>
+        <div class="row nowrap">
+          <input class="input grow mono" id="seed" maxlength="32" autocomplete="off" spellcheck="false" placeholder="blank = fresh random cards">
+          <button class="btn icon" id="newSeed" title="Make a random seed" aria-label="Make a random seed"><svg class="i"><use href="#i-refresh"/></svg></button>
+        </div>
+      </label>
+      <div class="bm-status" id="status" aria-live="polite"></div>
+      <div class="row">
+        <button class="btn primary grow" id="make"><svg class="i"><use href="#i-grid"/></svg>Make cards</button>
+        <button class="btn grow" id="print" disabled><svg class="i"><use href="#i-file"/></svg>Print</button>
+      </div>
+    </aside>
+    <section class="bm-preview" id="preview">
+      <div class="empty card"><b>No cards yet</b>Pick a type and press "Make cards".</div>
+    </section>
+  </div>
+
+  <div class="mt no-print" id="callerTab" hidden>
+    <div class="bm-caller">
+      <section class="card bm-callbox">
+        <div class="bm-ball" id="ball" aria-live="assertive"><span>Ready</span></div>
+        <div class="bm-last" id="last"></div>
+        <div class="row bm-callbtns">
+          <button class="btn primary big grow" id="next"><svg class="i"><use href="#i-play"/></svg>Call next <kbd>Space</kbd></button>
+          <button class="btn big" id="undo" disabled>Undo</button>
+          <button class="btn ghost big" id="reset">New game</button>
+        </div>
+        <p class="faint center" id="progress"></p>
+      </section>
+      <section class="card">
+        <h2>Board <small id="boardNote"></small></h2>
+        <div class="bm-board" id="board"></div>
+      </section>
+    </div>
+  </div>
+
+</main>
+<script src="app.js"></script>
+</body>
+</html>
